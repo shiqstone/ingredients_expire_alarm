@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ingredients_expire_alarm/util/size_fit_util.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:ingredients_expire_alarm/constant/constant.dart';
 import 'package:ingredients_expire_alarm/pages/settings/edit_item_page.dart';
@@ -63,21 +64,28 @@ class ItemListPageState extends State<ItemListPage> with AutomaticKeepAliveClien
   }
 
   Widget _build(BuildContext context) {
-    return Scaffold(
-        appBar: buildAppBar(),
-        body: SafeArea(
-            child: SmartRefresher(
-          enablePullDown: _vm.viewStatus == ViewStatus.loading ? false : true,
-          enablePullUp: false,
-          header: RefreshUtils.getHeader(),
-          // footer: RefreshUtils.getFooter(),
-          controller: _refreshController,
-          onRefresh: () {
-            _vm.loadData();
-          },
-          onLoading: () {},
-          child: _buildListView(),
-        )));
+    return WillPopScope(
+        onWillPop: () async {
+          Get.to(() => IndexPage(
+                tindex: 2,
+              ));
+          return true;
+        },
+        child: Scaffold(
+            appBar: buildAppBar(),
+            body: SafeArea(
+                child: SmartRefresher(
+              enablePullDown: _vm.viewStatus == ViewStatus.loading ? false : true,
+              enablePullUp: false,
+              header: RefreshUtils.getHeader(),
+              // footer: RefreshUtils.getFooter(),
+              controller: _refreshController,
+              onRefresh: () {
+                _vm.loadData();
+              },
+              onLoading: () {},
+              child: _buildListView(),
+            ))));
   }
 
   Widget _buildListView() {
@@ -128,33 +136,37 @@ class ItemListPageState extends State<ItemListPage> with AutomaticKeepAliveClien
   AppBar buildAppBar() {
     return AppBar(
         backgroundColor: Colors.white,
-        // leading: IconButton(
-        //     icon: ImageIcon(ViewUtils.getAssetImage('icon_activity_back')),
-        //     color: Colors.black,
-        //     onPressed: () {
-        //       Get.off(() => const SettingPage());
-        //     }),
+        leading: IconButton(
+            icon: ImageIcon(ViewUtils.getAssetImage('icon_activity_back')),
+            color: Colors.black,
+            onPressed: () {
+              Get.to(() => IndexPage(
+                    tindex: 2,
+                  ));
+            }),
         centerTitle: true,
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            IconButton(
-              icon: ImageIcon(ViewUtils.getAssetImage('icon_activity_back')),
-              color: Colors.white,
-              onPressed: () {
-              }
-            ),
-            SizedBox(
-              height: 16.w,
-            ),
+            // IconButton(
+            //     icon: ImageIcon(ViewUtils.getAssetImage('icon_activity_back')),
+            //     color: Colors.white,
+            //     onPressed: () {
+            //       Get.to(() => IndexPage(
+            //         tindex: 2,
+            //       ));
+            //     }),
+            // SizedBox(
+            //   height: 16.w,
+            // ),
             Text(
               '物品列表',
               style: TextStyle(fontSize: 18.sp, color: const Color(0xFF222222), fontWeight: FontWeight.bold),
             ),
-            // SizedBox(height: 16.w, width: (SizeFit.screenWidth ?? 240.w / 2) - 34.w),
-            SizedBox(
-              height: 16.w,
-            ),
+            SizedBox(height: 16.w, width: (SizeFit.screenWidth ?? 240.w / 2) - 34.w),
+            // SizedBox(
+            //   height: 16.w,
+            // ),
             IconButton(
               icon: ViewUtils.getImage(
                 'ic_active_add_img',

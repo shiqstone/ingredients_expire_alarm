@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:ingredients_expire_alarm/public.dart';
@@ -85,32 +86,34 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver, SingleTickerP
           designSize: const Size(375, 812),
           // allowFontScaling: false,
           builder: (context, child) {
-            return GetMaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'Ingredients Expire Alarm',
-              localizationsDelegates: const [
-                //此处
-                RefreshLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-                // CustomLocalizations.delegate
-              ],
-              locale: _locale,
-              supportedLocales: const <Locale>[
-                Locale('en', 'US'),
-                Locale('zh', 'CN'),
-              ],
-              navigatorObservers: [
-                routeObserver,
-              ],
-              // You can use the library anywhere in the app even in theme
-              theme: ThemeData(
-                primarySwatch: Colors.blue,
-                textTheme: Typography.englishLike2018.apply(fontSizeFactor: 1.sp),
-              ),
-              home: child,
-            );
+            return OKToast(
+                dismissOtherOnShow: true,
+                child: GetMaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  title: 'Ingredients Expire Alarm',
+                  localizationsDelegates: const [
+                    //此处
+                    RefreshLocalizations.delegate,
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                    // CustomLocalizations.delegate
+                  ],
+                  locale: _locale,
+                  supportedLocales: const <Locale>[
+                    Locale('en', 'US'),
+                    Locale('zh', 'CN'),
+                  ],
+                  navigatorObservers: [
+                    routeObserver,
+                  ],
+                  // You can use the library anywhere in the app even in theme
+                  theme: ThemeData(
+                    primarySwatch: Colors.blue,
+                    textTheme: Typography.englishLike2018.apply(fontSizeFactor: 1.sp),
+                  ),
+                  home: child,
+                ));
           },
           child: IndexPage(),
         );

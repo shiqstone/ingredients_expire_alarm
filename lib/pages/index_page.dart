@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:ingredients_expire_alarm/pages/settings/item_list_page.dart';
 import 'package:ingredients_expire_alarm/public.dart';
 import 'package:ingredients_expire_alarm/widget/lazy_index_stack.dart';
 
 import '../scanner/full_screen_scanner_page.dart';
 import 'alarm/item_list_page.dart';
+import 'settings/setting_page.dart';
 
 class IndexPage extends StatefulWidget {
   late int tindex = 0;
@@ -36,8 +36,8 @@ class _IndexPageState extends State<IndexPage> {
     AlarmListPage(),
     const FullScreenScannerPage(srcPath: 'scan'),
     // QRViewPage(),
-    // SettingPage(),
-    ItemListPage()
+    SettingPage(),
+    // ItemListPage()
   ];
   @override
   void initState() {

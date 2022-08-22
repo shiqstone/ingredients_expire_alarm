@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ingredients_expire_alarm/pages/settings/backup_page.dart';
 import 'package:ingredients_expire_alarm/pages/settings/item_list_page.dart';
 import 'package:ingredients_expire_alarm/public.dart';
 
@@ -32,16 +33,19 @@ class SettingPage extends StatelessWidget {
               () => Get.off(() => const ItemListPage()),
               showDivider: true,
             ),
+            SizedBox(
+              height: 16.w,
+            ),
             // buildSettingCommon(
             //     "隐私设置", () => Get.to(() => PrivacySettingPage())),
             // SizedBox(
             //   height: 16.w,
             // ),
-            // buildSettingCommon(
-            //   "关于 Clue",
-            //   () => Get.to(() => AboutPage()),
-            //   showDivider: true,
-            // ),
+            buildSettingCommon(
+              "备份",
+              () => Get.to(() => BackupPage()),
+              showDivider: true,
+            ),
             SizedBox(
               height: 16.w,
             ),
@@ -77,12 +81,12 @@ class SettingPage extends StatelessWidget {
   AppBar buildAppBar() {
     return AppBar(
         backgroundColor: Colors.white,
-        leading: IconButton(
-            icon: ImageIcon(ViewUtils.getAssetImage('icon_activity_back')),
-            color: Colors.black,
-            onPressed: () {
-              Get.back();
-            }),
+        // leading: IconButton(
+        //     icon: ImageIcon(ViewUtils.getAssetImage('icon_activity_back')),
+        //     color: Colors.black,
+        //     onPressed: () {
+        //       Get.back();
+        //     }),
         centerTitle: true,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -210,7 +214,7 @@ class SettingCommon extends StatelessWidget {
                       Container(
                         margin: EdgeInsets.only(left: 5.0.w, right: 15.w),
                         child: ViewUtils.getImage(
-                          "icon_active_more.png",
+                          "icon_active_more",
                           8.w,
                           12.h,
                         ),
