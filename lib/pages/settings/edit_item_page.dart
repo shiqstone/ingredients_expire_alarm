@@ -8,6 +8,8 @@ import 'package:ingredients_expire_alarm/util/view_utils.dart';
 
 import 'package:async/async.dart' show AsyncMemoizer;
 
+import 'item_list_page.dart';
+
 class EditItemRecordPage extends StatefulWidget {
   final int id;
   const EditItemRecordPage({Key? key, required this.id}) : super(key: key);
@@ -90,10 +92,10 @@ class _EditItemRecordPageState extends State<EditItemRecordPage> {
 
       await _databaseManage.updateItemRecord(item!);
 
-      // Get.off(() => const ItemListPage());
-      Get.off(() => IndexPage(
-            tindex: 2,
-          ));
+      Get.off(() => const ItemListPage());
+      // Get.off(() => IndexPage(
+      //       tindex: 2,
+      //     ));
     }
   }
 
@@ -119,11 +121,11 @@ class _EditItemRecordPageState extends State<EditItemRecordPage> {
             icon: ImageIcon(ViewUtils.getAssetImage('icon_activity_back')),
             color: Colors.black,
             onPressed: () {
-              // Get.back();
+              Get.back();
               // Get.off(() => const ItemListPage());
-              Get.to(() => IndexPage(
-                    tindex: 2,
-                  ));
+              // Get.to(() => IndexPage(
+              //       tindex: 2,
+              //     ));
             }),
         centerTitle: true,
         backgroundColor: Colors.white,

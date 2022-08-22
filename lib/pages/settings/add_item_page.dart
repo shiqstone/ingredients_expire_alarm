@@ -6,6 +6,8 @@ import 'package:ingredients_expire_alarm/model/item_record.dart';
 import 'package:ingredients_expire_alarm/public.dart';
 import 'package:ingredients_expire_alarm/util/view_utils.dart';
 
+import 'item_list_page.dart';
+
 class AddItemRecordPage extends StatefulWidget {
   final String barcode;
   const AddItemRecordPage({Key? key, required this.barcode}) : super(key: key);
@@ -69,10 +71,10 @@ class _AddItemRecordPageState extends State<AddItemRecordPage> {
       // Provider.of<ItemVm>(context, listen: false).addItem(item);
       // Navigator.pop(context);
 
-      // Get.off(() => const ItemListPage());
-      Get.off(() => IndexPage(
-            tindex: 2,
-          ));
+      Get.off(() => const ItemListPage());
+      // Get.off(() => IndexPage(
+      //       tindex: 2,
+      //     ));
     }
   }
 
@@ -98,10 +100,10 @@ class _AddItemRecordPageState extends State<AddItemRecordPage> {
             icon: ImageIcon(ViewUtils.getAssetImage('icon_activity_back')),
             color: Colors.black,
             onPressed: () {
-              // Get.back();
-              Get.to(() => IndexPage(
-                    tindex: 2,
-                  ));
+              Get.back();
+              // Get.to(() => IndexPage(
+              //       tindex: 2,
+              //     ));
             }),
         centerTitle: true,
         backgroundColor: Colors.white,
