@@ -9,8 +9,8 @@ import 'package:ingredients_expire_alarm/util/view_utils.dart';
 import 'item_list_page.dart';
 
 class AddItemRecordPage extends StatefulWidget {
-  final String barcode;
-  const AddItemRecordPage({Key? key, required this.barcode}) : super(key: key);
+  final String? barcode;
+  const AddItemRecordPage({Key? key, this.barcode}) : super(key: key);
 
   @override
   _AddItemRecordPageState createState() => _AddItemRecordPageState();
@@ -51,30 +51,47 @@ class _AddItemRecordPageState extends State<AddItemRecordPage> {
       _showSnackBar(context, "保质期不能为空");
       return;
     }
-    if (barcodeCtr.text.isNotEmpty && itemNameCtr.text.isNotEmpty) {
-      int validityPeriod = 0;
-      int period = int.parse(periodCtr.text);
-      if (ptype == 0) {
-        validityPeriod = period * 3600;
-      } else if (ptype == 1) {
-        validityPeriod = period * 86400;
-      } else if (ptype == 2) {
-        validityPeriod = period * 86400 * 30;
-      }
+    List<ItemRecord> rlist = await _databaseManage.getItemsByName(itemNameCtr.text);
+    if (rlist.isNotEmpty) {
+      WidgetsBinding.instance?.addPostFrameCallback((_) {
+        Get.defaultDialog(
+            content: const Text('是否继续添加？'),
+            title: '已存在同名物品',
+            onConfirm: () {
+              Get.close(0);
+            },
+            onCancel: () {
+              Get.offAll(() => const ItemListPage());
+            },
+            textConfirm: '是',
+            confirmTextColor: Colors.white,
+            textCancel: '否',
+            cancelTextColor: Colors.black);
+      });
+    }
+
+    int validityPeriod = 0;
+    int period = int.parse(periodCtr.text);
+    if (ptype == 0) {
+      validityPeriod = period * 3600;
+    } else if (ptype == 1) {
+      validityPeriod = period * 86400;
+    } else if (ptype == 2) {
+      validityPeriod = period * 86400 * 30;
+    }
+    if (itemNameCtr.text.isNotEmpty) {
       final ItemRecord item = ItemRecord(
-          barcode: int.parse(barcodeCtr.text),
           name: itemNameCtr.text,
           validityPeriod: validityPeriod,
           description: descriptCtr.text);
 
+      if (barcodeCtr.text.isNotEmpty) {
+        item.barcode = int.parse(barcodeCtr.text);
+      }
+
       await _databaseManage.insertItemRecord(item);
-      // Provider.of<ItemVm>(context, listen: false).addItem(item);
-      // Navigator.pop(context);
 
       Get.off(() => const ItemListPage());
-      // Get.off(() => IndexPage(
-      //       tindex: 2,
-      //     ));
     }
   }
 
@@ -125,9 +142,10 @@ class _AddItemRecordPageState extends State<AddItemRecordPage> {
                   children: [
                     RichText(
                       text: TextSpan(
-                          text: '条形码 ',
-                          style: TextStyle(color: const Color(0xFF2E2E2E), fontSize: 15.sp),
-                          children: [TextSpan(text: '*', style: TextStyle(fontSize: 16.sp, color: Colors.red))]),
+                        text: '条形码 ',
+                        style: TextStyle(color: const Color(0xFF2E2E2E), fontSize: 15.sp),
+                        // children: [TextSpan(text: '*', style: TextStyle(fontSize: 16.sp, color: Colors.red))]
+                      ),
                     ),
                     SizedBox(
                       width: 15.w,

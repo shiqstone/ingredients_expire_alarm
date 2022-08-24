@@ -32,7 +32,7 @@ class ItemDbManage {
 
   void _createDb(Database db, int newVersion) async {
     await db.execute(
-        'CREATE TABLE `item_record` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `barcode` int UNIQUE, `name` text, `description` text, `validityPeriod` int, `expireDate` text, `alarmTime` text, `status` tinyint);');
+        'CREATE TABLE `item_record` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `barcode` int, `name` text, `description` text, `validityPeriod` int, `expireDate` text, `alarmTime` text, `status` tinyint);');
   }
 
   //  读取数据
@@ -74,6 +74,19 @@ class ItemDbManage {
     } else {
       return null;
     }
+  }
+
+  Future<List<ItemRecord>> getItemsByName(String name) async {
+    Database db = await database;
+    var itemRecordMapList = await db.query(itemsTable, where: 'name = ?', whereArgs: [name]);
+    int count = itemRecordMapList.length;
+
+    List<ItemRecord> itemRecordList = [];
+
+    for (int i = 0; i < count; i++) {
+      itemRecordList.add(ItemRecord.fromMapObject(itemRecordMapList[i]));
+    }
+    return itemRecordList;
   }
 
   //  删除数据

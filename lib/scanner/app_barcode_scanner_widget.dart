@@ -1,6 +1,11 @@
 import 'package:ai_barcode/ai_barcode.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ingredients_expire_alarm/pages/alarm/add_alarm_page.dart';
+import 'package:ingredients_expire_alarm/pages/settings/add_item_page.dart';
+import 'package:ingredients_expire_alarm/public.dart';
+import 'package:ingredients_expire_alarm/util/view_utils.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 late String _label;
@@ -8,9 +13,12 @@ late Function(String result) _resultCallback;
 
 class AppBarcodeScannerWidget extends StatefulWidget {
   final bool openManual;
+  final String srcPath;
 
-  AppBarcodeScannerWidget.defaultStyle({Key? key, 
+  AppBarcodeScannerWidget.defaultStyle({
+    Key? key,
     Function(String result)? resultCallback,
+    this.srcPath = '',
     this.openManual = false,
     String label = '',
   }) : super(key: key) {
@@ -40,8 +48,7 @@ class _AppBarcodeState extends State<AppBarcodeScannerWidget> {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       TargetPlatform platform = Theme.of(context).platform;
       if (!kIsWeb) {
-        if (platform == TargetPlatform.android ||
-            platform == TargetPlatform.iOS) {
+        if (platform == TargetPlatform.android || platform == TargetPlatform.iOS) {
           _requestMobilePermission();
         } else {
           setState(() {
@@ -77,7 +84,7 @@ class _AppBarcodeState extends State<AppBarcodeScannerWidget> {
         Expanded(
           child: _isGranted
               ? _useCameraScan
-                  ? _BarcodeScannerWidget()
+                  ? _BarcodeScannerWidget(srcPath: widget.srcPath)
                   : _BarcodeInputWidget.defaultStyle(
                       changed: (String value) {
                         _inputValue = value;
@@ -151,8 +158,7 @@ class _BarcodeInputState extends State<_BarcodeInputWidget> {
       final text = _controller.text.toLowerCase();
       _controller.value = _controller.value.copyWith(
         text: text,
-        selection:
-            TextSelection(baseOffset: text.length, extentOffset: text.length),
+        selection: TextSelection(baseOffset: text.length, extentOffset: text.length),
         composing: TextRange.empty,
       );
     });
@@ -187,6 +193,10 @@ class _BarcodeInputState extends State<_BarcodeInputWidget> {
 
 ///ScannerWidget
 class _BarcodeScannerWidget extends StatefulWidget {
+  final String srcPath;
+
+  const _BarcodeScannerWidget({Key? key, required this.srcPath}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _AppBarcodeScannerWidgetState();
@@ -195,6 +205,8 @@ class _BarcodeScannerWidget extends StatefulWidget {
 
 class _AppBarcodeScannerWidgetState extends State<_BarcodeScannerWidget> {
   late ScannerController _scannerController;
+
+  bool flashOn = true;
 
   @override
   void initState() {
@@ -226,11 +238,71 @@ class _AppBarcodeScannerWidgetState extends State<_BarcodeScannerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: <Widget>[
-        Expanded(
-          child: _getScanWidgetByPlatform(),
-        ),
+        _getScanWidgetByPlatform(),
+        // Expanded(
+        //   child: _getScanWidgetByPlatform(),
+        // ),
+        Positioned(
+            bottom: 25.h,
+            right: 35.w,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.w),
+              height: 64.w,
+              color: Colors.transparent,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  CircleAvatar(
+                      radius: 25.5.w,
+                      backgroundColor: Colors.white.withOpacity(0.6),
+                      child: IconButton(
+                        icon: ViewUtils.getImage(
+                          'keyboard_black',
+                          24.w,
+                          24.w,
+                          // color: Colors.transparent,
+                        ),
+                        onPressed: () {
+                          if (widget.srcPath == 'addItem') {
+                            Get.to(
+                              () => const AddItemRecordPage(barcode: ''),
+                            );
+                          } else if (widget.srcPath == 'scan') {
+                            Get.off(() => const AddAlarmRecordPage(
+                                  barcode: '',
+                                ));
+                          }
+                        },
+                      )),
+                  // IconButton(
+                  //     icon: ViewUtils.getImage(
+                  //       'keyboard_black',
+                  //       24.w,
+                  //       24.w,
+                  //       // color: Colors.transparent,
+                  //     ),
+                  //     onPressed: () => Get.to(
+                  //           () => const AddItemRecordPage(barcode: ''),
+                  //         )),
+                  // SizedBox(
+                  //   height: 16.h,
+                  // ),
+                  // IconButton(
+                  //   icon: ViewUtils.getImage(
+                  //     'flashlight',
+                  //     24.w,
+                  //     24.w,
+                  //     // color: Colors.transparent,
+                  //   ),
+                  //   onPressed: () => {
+                  //     flashOn ? _scannerController.closeFlash() : _scannerController.openFlash()
+                  //   },
+                  // ),
+                ],
+              ),
+            ))
         // Row(
         //   mainAxisAlignment: MainAxisAlignment.spaceAround,
         //   children: [

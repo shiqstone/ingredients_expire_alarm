@@ -257,6 +257,7 @@ class CustomNavBarWidget extends StatelessWidget {
         height: 58.h,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: items.map((item) {
             int index = items.indexOf(item);
             return Flexible(child: _buildItem(item, index));
