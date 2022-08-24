@@ -61,7 +61,7 @@ class _CountDownWidgetState extends State<CountDownWidget> {
             color: widget.textColor ?? CupertinoDynamicColor.resolve(CupertinoColors.systemRed, context)),
       );
     } else {
-      int alarmSec = 3570;
+      int alarmSec = 300;
       if (computingTime > 0) {
         // if (computingTime <= alarmSec && !widget.isAlarming) {
         //   // if (widget.switchAlarm(true)) {
