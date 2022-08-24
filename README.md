@@ -12,8 +12,12 @@
 
 ## 设计规划
 该项目预计分为三个阶段
-- 第一阶段，完成单机版本，提供最基本的物品管理、扫码添加和定时提醒功能
+- 第一阶段，完成单机版本，提供最基本的物品管理、扫码添加和定时提醒功能✅
 - 第二阶段，在单机版的基础上，增加数据导入导出，维持离线可用，考虑增加支持不同使用场景的模式
-- 第三阶段，添加联网数据同步、权限管理及其他相关功能
+- ~~第三阶段，添加联网数据同步、权限管理及其他相关功能~~
 
 ## 技术相关
+- 条形码扫码 [ai_barcode](https://pub.dev/packages/ai_barcode)
+- 数据存储 [sqflite](https://pub.dev/packages/sqflite)
+- 闹钟提醒 [flutter_ringtone_player](https://pub.dev/packages/flutter_ringtone_player)
+- 数据导入导出 [csv](https://pub.dev/packages/csv)
