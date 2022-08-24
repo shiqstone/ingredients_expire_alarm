@@ -115,7 +115,7 @@ ThemeBean defaultTheme = ThemeBean(
   //底部导航栏颜色
   const Color(0xfff2f2f2),
   //二级标题颜色
-  const Color(0xff666666),
+  const Color(0xff056141),
   //二级背景色
   const Color(0xffffffff),
   //facebook

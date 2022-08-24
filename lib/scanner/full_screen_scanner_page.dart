@@ -37,7 +37,7 @@ class _FullScreenScannerPageState extends State<FullScreenScannerPage> {
                   _code = code;
                 });
                 if (widget.srcPath == 'addItem') {
-                  Get.off(() => AddItemRecordPage(
+                  Get.to(() => AddItemRecordPage(
                         barcode: code,
                       ));
                 } else if (widget.srcPath == 'scan') {
@@ -46,6 +46,7 @@ class _FullScreenScannerPageState extends State<FullScreenScannerPage> {
                       ));
                 }
               },
+              srcPath: widget.srcPath,
               openManual: false,
             ),
           ),

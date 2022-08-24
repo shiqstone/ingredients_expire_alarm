@@ -38,7 +38,7 @@ class _EditItemRecordPageState extends State<EditItemRecordPage> {
   Future<void> getItemData() async {
     item = await _databaseManage.getItemById(widget.id);
     if (item != null) {
-      barcodeCtr = TextEditingController(text: item!.barcode!.toString());
+      barcodeCtr = TextEditingController(text: item!.barcode?.toString());
       itemNameCtr = TextEditingController(text: item!.name);
       descriptCtr = TextEditingController(text: item!.description);
 

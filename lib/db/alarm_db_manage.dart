@@ -64,6 +64,19 @@ class AlarmDbManage {
     return itemRecordList;
   }
 
+  Future<List<ItemAlarm>> getItemsByName(String name) async {
+    Database db = await database;
+    var itemAlarmMapList = await db.query(itemsTable, where: 'name = ?', whereArgs: [name]);
+    int count = itemAlarmMapList.length;
+
+    List<ItemAlarm> itemRecordList = [];
+
+    for (int i = 0; i < count; i++) {
+      itemRecordList.add(ItemAlarm.fromMapObject(itemAlarmMapList[i]));
+    }
+    return itemRecordList;
+  }
+
   //  删除数据
   Future<int> deleteItemAlarm(int id) async {
     Database db = await database;

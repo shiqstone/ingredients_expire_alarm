@@ -61,25 +61,45 @@ class ItemView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(Utils.maxLengthWithEllipse(entity?.name ?? '', 25),
-                                maxLines: 1,
-                                style: TextStyle(
-                                    color: themeColor.titleLightColor, fontWeight: FontWeight.w600, fontSize: 16.sp)),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(Utils.maxLengthWithEllipse(entity?.name ?? '', 25),
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                        color: themeColor.titleBlackColor,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16.sp)),
+                                entity!.barcode != null
+                                    ? Text(
+                                        Utils.maxLengthWithEllipse(
+                                            (entity!.barcode != null ? entity!.barcode!.toString() : ''), 25),
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                            color: themeColor.titleLightColor,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 12.sp))
+                                    : Container(),
+                              ],
+                            ),
                             SizedBox(
                               height: 15.w,
                               width: 22.w,
                             ),
                             Text(period.toString(),
                                 style: TextStyle(
-                                  height: 1.4.w,
-                                    color: themeColor.primaryColor, fontWeight: FontWeight.w600, fontSize: 16.sp)),
+                                    height: 1.8.w,
+                                    color: themeColor.primaryColor,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16.sp)),
                             SizedBox(
                               height: 15.w,
                               width: 5.w,
                             ),
                             Text(ptype,
                                 style: TextStyle(
-                                    height: 1.4.w,
+                                    height: 1.8.w,
                                     color: themeColor.titleBlackColor,
                                     fontWeight: FontWeight.w600,
                                     fontSize: 16.sp)),
@@ -92,26 +112,26 @@ class ItemView extends StatelessWidget {
                     ],
                   ),
                   GestureDetector(
-                    onTap: () => {
-                      Get.to(() => EditItemRecordPage(id: entity!.id!))
-                    },
+                    onTap: () => {Get.to(() => EditItemRecordPage(id: entity!.id!))},
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ViewUtils.getImage('ic_comment_bi', 25.w, 21.w),
-                        SizedBox(height: 4.w,),
+                        SizedBox(
+                          height: 4.w,
+                        ),
                       ],
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => {
-                      onDelete(entity!.id!)
-                    },
+                    onTap: () => {onDelete(entity!.id!)},
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ViewUtils.getImage('ic_delete', 25.w, 21.w),
-                        SizedBox(height: 4.w,),
+                        SizedBox(
+                          height: 4.w,
+                        ),
                       ],
                     ),
                   ),
@@ -125,7 +145,7 @@ class ItemView extends StatelessWidget {
   }
 
   Future<void> onDelete(int id) async {
-      await _databaseManage.deleteItemRecord(id);
-      ItemListVm.instance.loadData();
+    await _databaseManage.deleteItemRecord(id);
+    ItemListVm.instance.loadData();
   }
 }

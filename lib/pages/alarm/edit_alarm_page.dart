@@ -29,6 +29,8 @@ class _AddAlarmRecordPageState extends State<EditAlarmRecordPage> {
   DateTime? expireTime;
   DateTime? alarmTime;
 
+  bool? bcMode;
+
   // ItemRecord? item;
   ItemAlarm? itemAlarm;
 
@@ -46,7 +48,9 @@ class _AddAlarmRecordPageState extends State<EditAlarmRecordPage> {
     if (itemAlarm != null) {
       // item = await _itemDbMgr.getItemByBarcode(itemAlarm!.barcode!.toString());
 
-      barcodeCtr = TextEditingController(text: itemAlarm?.barcode!.toString());
+      if (itemAlarm?.barcode != null) {
+        barcodeCtr = TextEditingController(text: itemAlarm?.barcode!.toString());
+      }
       itemNameCtr = TextEditingController(text: itemAlarm?.name);
       // descriptCtr = TextEditingController(text: item?.description);
 
@@ -160,7 +164,8 @@ class _AddAlarmRecordPageState extends State<EditAlarmRecordPage> {
                             text: TextSpan(
                                 text: '条形码 ',
                                 style: TextStyle(color: const Color(0xFF2E2E2E), fontSize: 15.sp),
-                                children: [TextSpan(text: '*', style: TextStyle(fontSize: 16.sp, color: Colors.red))]),
+                                // children: [TextSpan(text: '*', style: TextStyle(fontSize: 16.sp, color: Colors.red))]
+                                ),
                           ),
                           SizedBox(
                             width: 15.w,

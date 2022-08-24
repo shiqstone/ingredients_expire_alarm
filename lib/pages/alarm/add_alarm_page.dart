@@ -15,8 +15,8 @@ import 'package:async/async.dart' show AsyncMemoizer;
 import 'widget/calendar_widget.dart';
 
 class AddAlarmRecordPage extends StatefulWidget {
-  final String barcode;
-  const AddAlarmRecordPage({Key? key, required this.barcode}) : super(key: key);
+  final String? barcode;
+  const AddAlarmRecordPage({Key? key, this.barcode}) : super(key: key);
 
   @override
   _AddAlarmRecordPageState createState() => _AddAlarmRecordPageState();
@@ -31,7 +31,11 @@ class _AddAlarmRecordPageState extends State<AddAlarmRecordPage> {
   late var periodCtr = TextEditingController();
   DateTime? expireTime;
 
+  bool? bcMode;
   ItemRecord? item;
+  Map<int, String> itemMap = {};
+  List<DropdownMenuItem<int>> itemOpt = [];
+  int? optId;
 
   final AlarmDbManage _alarmDbMgr = AlarmDbManage();
   final ItemDbManage _itemDbMgr = ItemDbManage();
@@ -43,26 +47,87 @@ class _AddAlarmRecordPageState extends State<AddAlarmRecordPage> {
   }
 
   Future<void> loadData() async {
-    item = await _itemDbMgr.getItemByBarcode(widget.barcode);
-    if (item == null) {
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
-        Get.defaultDialog(
-            content: const Text('是否添加？'),
-            title: '物品未入库',
-            onConfirm: () {
-              Get.to(() => AddItemRecordPage(barcode: widget.barcode));
-            },
-            onCancel: () {
-              // Get.back(closeOverlays: true);
-              Get.offAll(() => IndexPage());
-            },
-            textConfirm: '是',
-            confirmTextColor: Colors.white,
-            textCancel: '否',
-            cancelTextColor: Colors.black);
-      });
+    if (widget.barcode != null && widget.barcode!.isNotEmpty) {
+      bcMode = true;
+      item = await _itemDbMgr.getItemByBarcode(widget.barcode!);
     } else {
-      barcodeCtr = TextEditingController(text: item?.barcode!.toString());
+      bcMode = false;
+      var ilist = await _itemDbMgr.getItemRecordList();
+      for (var rec in ilist) {
+        if (rec.barcode != null) {
+          continue;
+        }
+        itemMap[rec.id!] = rec.name!;
+        itemOpt.add(DropdownMenuItem(
+          value: rec.id!,
+          child: Text(rec.name!),
+        ));
+      }
+    }
+
+    if (bcMode!) {
+      if (item == null) {
+        WidgetsBinding.instance?.addPostFrameCallback((_) {
+          Get.defaultDialog(
+              content: const Text('是否添加？'),
+              title: '物品未入库',
+              onConfirm: () {
+                Get.to(() => AddItemRecordPage(barcode: widget.barcode));
+              },
+              onCancel: () {
+                // Get.back(closeOverlays: true);
+                Get.offAll(() => IndexPage());
+              },
+              textConfirm: '是',
+              confirmTextColor: Colors.white,
+              textCancel: '否',
+              cancelTextColor: Colors.black);
+        });
+      } else {
+        barcodeCtr = TextEditingController(text: item?.barcode!.toString());
+        itemNameCtr = TextEditingController(text: item?.name);
+        descriptCtr = TextEditingController(text: item?.description);
+
+        int period = 0;
+        if ((item?.validityPeriod)! > 86400 * 30) {
+          ptype = 2;
+          period = ((item?.validityPeriod)! / 86400 / 30).round();
+        } else if ((item?.validityPeriod)! > 86400) {
+          ptype = 1;
+          period = ((item?.validityPeriod)! / 86400).round();
+        } else {
+          ptype = 0;
+          period = ((item?.validityPeriod)! / 3600).round();
+        }
+        periodCtr = TextEditingController(text: period.toString());
+      }
+    } else {
+      if (optId != null) {
+        item = await _itemDbMgr.getItemById(optId!);
+
+        itemNameCtr = TextEditingController(text: item?.name);
+        descriptCtr = TextEditingController(text: item?.description);
+
+        int period = 0;
+        if ((item?.validityPeriod)! > 86400 * 30) {
+          ptype = 2;
+          period = ((item?.validityPeriod)! / 86400 / 30).round();
+        } else if ((item?.validityPeriod)! > 86400) {
+          ptype = 1;
+          period = ((item?.validityPeriod)! / 86400).round();
+        } else {
+          ptype = 0;
+          period = ((item?.validityPeriod)! / 3600).round();
+        }
+        periodCtr = TextEditingController(text: period.toString());
+      }
+    }
+  }
+
+  Future<void> onChanged() async {
+    if (optId != null) {
+      item = await _itemDbMgr.getItemById(optId!);
+
       itemNameCtr = TextEditingController(text: item?.name);
       descriptCtr = TextEditingController(text: item?.description);
 
@@ -103,19 +168,35 @@ class _AddAlarmRecordPageState extends State<AddAlarmRecordPage> {
       alarmTime = expireTime!.add(const Duration(seconds: 86400));
     }
 
-    List<ItemAlarm?> list = await _alarmDbMgr.getItemByBarcode(widget.barcode);
-    for (var item in list) {
-      item!.status = 0;
-      await _alarmDbMgr.updateItemAlarm(item);
-    }
+    final ItemAlarm itemAlarm;
+    if (bcMode!) {
+      List<ItemAlarm?> list = await _alarmDbMgr.getItemByBarcode(widget.barcode!);
+      for (var item in list) {
+        item!.status = 0;
+        await _alarmDbMgr.updateItemAlarm(item);
+      }
 
-    final ItemAlarm itemAlarm = ItemAlarm(
-      barcode: int.parse(barcodeCtr.text),
-      name: itemNameCtr.text,
-      validityPeriod: item!.validityPeriod,
-      expireDate: expireTime,
-      alarmTime: alarmTime,
-    );
+      itemAlarm = ItemAlarm(
+        barcode: int.parse(barcodeCtr.text),
+        name: itemNameCtr.text,
+        validityPeriod: item!.validityPeriod,
+        expireDate: expireTime,
+        alarmTime: alarmTime,
+      );
+    } else {
+      List<ItemAlarm?> list = await _alarmDbMgr.getItemsByName(itemMap[optId]!);
+      for (var item in list) {
+        item!.status = 0;
+        await _alarmDbMgr.updateItemAlarm(item);
+      }
+
+      itemAlarm = ItemAlarm(
+        name: itemNameCtr.text,
+        validityPeriod: item!.validityPeriod,
+        expireDate: expireTime,
+        alarmTime: alarmTime,
+      );
+    }
 
     await _alarmDbMgr.insertItemAlarm(itemAlarm);
 
@@ -139,25 +220,30 @@ class _AddAlarmRecordPageState extends State<AddAlarmRecordPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            icon: ImageIcon(ViewUtils.getAssetImage('icon_activity_back')),
-            color: Colors.black,
-            onPressed: () {
-              Get.to(() => IndexPage(
-                    tindex: 0,
-                  ));
-            }),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        title: Text(
-          '更新闹钟',
-          style: TextStyle(fontSize: 18.sp, color: const Color(0xFF222222), fontWeight: FontWeight.bold),
-        ),
-      ),
-      body: _build(context),
-    );
+    return WillPopScope(
+        onWillPop: () async {
+          Get.to(() => IndexPage());
+          return true;
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+                icon: ImageIcon(ViewUtils.getAssetImage('icon_activity_back')),
+                color: Colors.black,
+                onPressed: () {
+                  Get.to(() => IndexPage(
+                        tindex: 0,
+                      ));
+                }),
+            centerTitle: true,
+            backgroundColor: Colors.white,
+            title: Text(
+              '更新闹钟',
+              style: TextStyle(fontSize: 18.sp, color: const Color(0xFF222222), fontWeight: FontWeight.bold),
+            ),
+          ),
+          body: _build(context),
+        ));
   }
 
   ///定义异步寄存器
@@ -191,37 +277,41 @@ class _AddAlarmRecordPageState extends State<AddAlarmRecordPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          RichText(
-                            text: TextSpan(
+                      Visibility(
+                        visible: bcMode!,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            RichText(
+                              text: TextSpan(
                                 text: '条形码 ',
                                 style: TextStyle(color: const Color(0xFF2E2E2E), fontSize: 15.sp),
-                                children: [TextSpan(text: '*', style: TextStyle(fontSize: 16.sp, color: Colors.red))]),
-                          ),
-                          SizedBox(
-                            width: 15.w,
-                          ),
-                          SizedBox(
-                            width: 1.w,
-                            height: 28.5.h,
-                            child: Container(
-                              color: const Color(0xFFDEDEDE),
+                                // children: [TextSpan(text: '*', style: TextStyle(fontSize: 16.sp, color: Colors.red))]
+                              ),
                             ),
-                          ),
-                          Expanded(
-                              child: TextField(
-                            controller: barcodeCtr,
-                            readOnly: true,
-                            decoration: InputDecoration(
-                                hintStyle: TextStyle(
-                                    color: themeColor.titleLightColor, fontSize: 18.sp, fontWeight: FontWeight.w600),
-                                contentPadding: EdgeInsets.only(left: 10.w),
-                                border: InputBorder.none),
-                          )),
-                        ],
+                            SizedBox(
+                              width: 15.w,
+                            ),
+                            SizedBox(
+                              width: 1.w,
+                              height: 28.5.h,
+                              child: Container(
+                                color: const Color(0xFFDEDEDE),
+                              ),
+                            ),
+                            Expanded(
+                                child: TextField(
+                              controller: barcodeCtr,
+                              readOnly: true,
+                              decoration: InputDecoration(
+                                  hintStyle: TextStyle(
+                                      color: themeColor.titleLightColor, fontSize: 18.sp, fontWeight: FontWeight.w600),
+                                  contentPadding: EdgeInsets.only(left: 10.w),
+                                  border: InputBorder.none),
+                            )),
+                          ],
+                        ),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -244,16 +334,43 @@ class _AddAlarmRecordPageState extends State<AddAlarmRecordPage> {
                             ),
                           ),
                           Expanded(
-                              child: TextField(
-                            controller: itemNameCtr,
-                            readOnly: true,
-                            decoration: InputDecoration(
-                                hintText: '请输入物品名称',
-                                hintStyle: TextStyle(
-                                    color: themeColor.titleLightColor, fontSize: 18.sp, fontWeight: FontWeight.w600),
-                                contentPadding: EdgeInsets.only(left: 10.w),
-                                border: InputBorder.none),
-                          )),
+                            child: bcMode!
+                                ? TextField(
+                                    controller: itemNameCtr,
+                                    readOnly: true,
+                                    decoration: InputDecoration(
+                                        hintText: '请输入物品名称',
+                                        hintStyle: TextStyle(
+                                            color: themeColor.titleLightColor,
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w600),
+                                        contentPadding: EdgeInsets.only(left: 10.w),
+                                        border: InputBorder.none),
+                                  )
+                                : Container(
+                                    margin: EdgeInsets.only(left: 10.w, right: 5.w),
+                                    child: DropdownButton<int>(
+                                      value: optId,
+                                      icon: const Icon(Icons.arrow_downward),
+                                      elevation: 16,
+                                      isExpanded: true,
+                                      hint: Text('请选择物品',
+                                          style: TextStyle(
+                                            color: themeColor.titleLightColor,
+                                            fontSize: 18.sp,
+                                            fontWeight: FontWeight.w600,
+                                          )),
+                                      onChanged: (int? newValue) {
+                                        if (mounted) {
+                                          setState(() {
+                                            optId = newValue;
+                                          });
+                                          onChanged();
+                                        }
+                                      },
+                                      items: itemOpt,
+                                    )),
+                          ),
                         ],
                       ),
                       Row(
@@ -459,7 +576,10 @@ class _AddAlarmRecordPageState extends State<AddAlarmRecordPage> {
                 ),
                 onTap: () async {
                   Get.to(
-                    () => CalendarWidget(expireTime: expireTime, title: '选择过期日期',),
+                    () => CalendarWidget(
+                      expireTime: expireTime,
+                      title: '选择过期日期',
+                    ),
                     fullscreenDialog: false,
                   )!
                       .then((value) => {
