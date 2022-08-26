@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ingredients_expire_alarm/pages/alarm/add_alarm_page.dart';
+import 'package:ingredients_expire_alarm/pages/home_alarm/add_alarm_page.dart';
 import 'package:ingredients_expire_alarm/pages/settings/add_item_page.dart';
 import 'package:ingredients_expire_alarm/public.dart';
 
@@ -42,6 +43,10 @@ class _FullScreenScannerPageState extends State<FullScreenScannerPage> {
                       ));
                 } else if (widget.srcPath == 'scan') {
                   Get.off(() => AddAlarmRecordPage(
+                        barcode: code,
+                      ));
+                } else if (widget.srcPath == 'homeAlarm') {
+                  Get.off(() => AddHomeAlarmRecordPage(
                         barcode: code,
                       ));
                 }

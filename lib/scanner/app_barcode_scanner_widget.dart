@@ -254,7 +254,9 @@ class _AppBarcodeScannerWidgetState extends State<_BarcodeScannerWidget> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  CircleAvatar(
+                  Visibility(
+                    visible: widget.srcPath == 'scan' || widget.srcPath == 'addItem',
+                    child: CircleAvatar(
                       radius: 25.5.w,
                       backgroundColor: Colors.white.withOpacity(0.6),
                       child: IconButton(
@@ -276,6 +278,8 @@ class _AppBarcodeScannerWidgetState extends State<_BarcodeScannerWidget> {
                           }
                         },
                       )),
+                  )
+                  
                   // IconButton(
                   //     icon: ViewUtils.getImage(
                   //       'keyboard_black',

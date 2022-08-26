@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ingredients_expire_alarm/mode.dart';
 import 'package:ingredients_expire_alarm/pages/settings/backup_page.dart';
 import 'package:ingredients_expire_alarm/pages/settings/item_list_page.dart';
+import 'package:ingredients_expire_alarm/pages/settings/set_mode_page.dart';
 import 'package:ingredients_expire_alarm/public.dart';
 
 import 'package:ingredients_expire_alarm/util/view_utils.dart';
@@ -28,11 +30,13 @@ class SettingPage extends StatelessWidget {
             SizedBox(
               height: 16.w,
             ),
-            buildSettingCommon(
-              "物品列表",
-              () => Get.off(() => const ItemListPage()),
-              showDivider: true,
-            ),
+            Visibility(
+                visible: (SpUtil.getString('mode') != Mode.homeMode.name),
+                child: buildSettingCommon(
+                  "物品列表",
+                  () => Get.off(() => const ItemListPage()),
+                  showDivider: true,
+                )),
             SizedBox(
               height: 16.w,
             ),
@@ -41,6 +45,14 @@ class SettingPage extends StatelessWidget {
             // SizedBox(
             //   height: 16.w,
             // ),
+            buildSettingCommon(
+              "模式选择",
+              () => Get.to(() => const SetModePage()),
+              showDivider: true,
+            ),
+            SizedBox(
+              height: 16.w,
+            ),
             buildSettingCommon(
               "备份",
               () => Get.to(() => BackupPage()),
