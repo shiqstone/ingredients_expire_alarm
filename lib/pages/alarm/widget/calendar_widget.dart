@@ -45,8 +45,8 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           titleCentered: true,
           headerPadding: EdgeInsets.only(top: 10.w, bottom: 10.w),
           leftChevronPadding: EdgeInsets.all(4.w),
-          leftChevronMargin: EdgeInsets.only(left: 120.w),
-          rightChevronMargin: EdgeInsets.only(right: 120.w),
+          leftChevronMargin: EdgeInsets.only(left: 110.w),
+          rightChevronMargin: EdgeInsets.only(right: 110.w),
           rightChevronPadding: EdgeInsets.all(4.w),
           leftChevronVisible: true,
           rightChevronVisible: true,
@@ -57,11 +57,11 @@ class _CalendarWidgetState extends State<CalendarWidget> {
         calendarStyle: _calendarStyle(),
         calendarBuilders: CalendarBuilders(
           headerTitleBuilder: (context, day) {
-            final text = DateFormat.MMMM('zh_CN').format(day);
+            final text = DateFormat.yM('zh_CN').format(day);
             return Center(
               child: Text(
                 text,
-                style: TextStyle(color: const Color(0xff000000), fontSize: 15.sp, fontWeight: FontWeight.w500),
+                style: TextStyle(color: const Color(0xff000000), fontSize: 14.sp, fontWeight: FontWeight.w500),
               ),
             );
           },
@@ -194,5 +194,5 @@ List<DateTime> daysInRange(DateTime first, DateTime last) {
 }
 
 final kToday = DateTime.now();
-final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
-final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);
+final kFirstDay = DateTime(kToday.year, kToday.month - 1, kToday.day);
+final kLastDay = DateTime(kToday.year + 3, kToday.month, kToday.day);
