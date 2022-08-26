@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:ingredients_expire_alarm/pages/home_alarm/item_list_page.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:ingredients_expire_alarm/public.dart';
 import 'package:ingredients_expire_alarm/util/global.dart';
+
+import 'mode.dart';
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 Future<void> main() async {
@@ -115,7 +118,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver, SingleTickerP
                   home: child,
                 ));
           },
-          child: IndexPage(),
+          child: (SpUtil.getString('mode') == Mode.homeMode.name) ? const HomeAlarmListPage() : IndexPage(),
         );
       });
     });
