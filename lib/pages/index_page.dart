@@ -33,10 +33,10 @@ class _IndexPageState extends State<IndexPage> {
   }
 
   final List<Widget> tabBodies = [
-    AlarmListPage(),
+    const AlarmListPage(),
     const FullScreenScannerPage(srcPath: 'scan'),
     // QRViewPage(),
-    SettingPage(),
+    const SettingPage(),
     // ItemListPage()
   ];
   @override

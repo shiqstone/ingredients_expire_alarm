@@ -70,7 +70,7 @@ class _AlarmItemViewState extends State<AlarmItemView> {
                           children: [
                             GestureDetector(
                                 onTap: () => widget.onPressed!(),
-                                child: Text(Utils.maxLengthWithEllipse(widget.entity?.name ?? '', 25),
+                                child: Text(Utils.maxLengthWithEllipse(widget.entity?.name ?? '', 10),
                                     maxLines: 1,
                                     style: TextStyle(
                                         color: isAlarming ? themeColor.titleWhiteColor : themeColor.titleLightColor,
