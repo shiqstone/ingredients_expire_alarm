@@ -55,12 +55,12 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver, SingleTickerP
     setState(() {
       _locale = const Locale('zh', 'CH');
     });
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 

@@ -53,7 +53,7 @@ class _AddItemRecordPageState extends State<AddItemRecordPage> {
     }
     List<ItemRecord> rlist = await _databaseManage.getItemsByName(itemNameCtr.text);
     if (rlist.isNotEmpty) {
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         Get.defaultDialog(
             content: const Text('是否继续添加？'),
             title: '已存在同名物品',

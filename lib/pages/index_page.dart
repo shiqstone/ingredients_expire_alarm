@@ -43,7 +43,7 @@ class _IndexPageState extends State<IndexPage> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance?.addPostFrameCallback((time) {
+    WidgetsBinding.instance.addPostFrameCallback((time) {
       mCtr.tabIndex.value = widget.tindex;
     });
   }

@@ -15,7 +15,7 @@ import 'package:ingredients_expire_alarm/widget/status_view.dart';
 import 'add_alarm_page.dart';
 // import 'edit_alarm_page.dart';
 import 'widget/item_view_widget.dart';
-import 'widget/menu_widget.dart';
+import 'widget/menu_widget.dart' as mw;
 import 'widget/sheet_widget.dart';
 
 class HomeAlarmListPage extends StatefulWidget {
@@ -173,20 +173,20 @@ class HomeAlarmListPageState extends State<HomeAlarmListPage> with AutomaticKeep
   }
 
   void showMenuDialog() {
-    List<MenuItem> items = [];
-    items.add(MenuItem(
+    List<mw.MenuItem> items = [];
+    items.add(mw.MenuItem(
         '扫码添加',
         () => {
               Get.to(() => const FullScreenScannerPage(srcPath: 'homeAlarm'))
             }));
-    items.add(MenuItem(
+    items.add(mw.MenuItem(
         '手动添加',
         () => {
               Get.to(() => const AddHomeAlarmRecordPage(
                     barcode: '',
                   ))
             }));
-    items.add(MenuItem('取消', () {
+    items.add(mw.MenuItem('取消', () {
       Get.back();
     }));
 
@@ -201,7 +201,7 @@ class HomeAlarmListPageState extends State<HomeAlarmListPage> with AutomaticKeep
         backgroundColor: Colors.transparent,
         context: context,
         builder: (context) {
-          return MenuBottomWidget(items: items);
+          return mw.MenuBottomWidget(items: items);
         });
   }
 }

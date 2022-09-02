@@ -67,7 +67,7 @@ class _AddAlarmRecordPageState extends State<AddAlarmRecordPage> {
 
     if (bcMode!) {
       if (item == null) {
-        WidgetsBinding.instance?.addPostFrameCallback((_) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
           Get.defaultDialog(
               content: const Text('是否添加？'),
               title: '物品未入库',
