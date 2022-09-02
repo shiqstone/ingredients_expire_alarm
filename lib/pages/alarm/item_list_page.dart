@@ -127,12 +127,7 @@ class AlarmListPageState extends State<AlarmListPage> with AutomaticKeepAliveCli
   AppBar buildAppBar() {
     return AppBar(
         backgroundColor: Colors.white,
-        // leading: IconButton(
-        //     icon: ImageIcon(ViewUtils.getAssetImage('icon_activity_back')),
-        //     color: Colors.black,
-        //     onPressed: () {
-        //       Get.off(() => const SettingPage());
-        //     }),
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,

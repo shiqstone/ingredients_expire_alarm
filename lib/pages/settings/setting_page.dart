@@ -93,12 +93,7 @@ class SettingPage extends StatelessWidget {
   AppBar buildAppBar() {
     return AppBar(
         backgroundColor: Colors.white,
-        // leading: IconButton(
-        //     icon: ImageIcon(ViewUtils.getAssetImage('icon_activity_back')),
-        //     color: Colors.black,
-        //     onPressed: () {
-        //       Get.back();
-        //     }),
+        automaticallyImplyLeading: false,
         centerTitle: true,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,

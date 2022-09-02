@@ -85,29 +85,17 @@ class _AlarmItemViewState extends State<AlarmItemView> {
                       ),
                     ],
                   ),
-                  CountDownWidget(
-                      index: widget.index,
-                      validTime: widget.entity!.alarmTime!,
-                      switchAlarm: switchAlarm,
-                      isAlarming: isAlarming),
                   Row(
                     children: [
-                      // GestureDetector(
-                      //   onTap: () => widget.onPressed!(),
-                      //   child: Column(
-                      //     mainAxisSize: MainAxisSize.min,
-                      //     children: [
-                      //       ViewUtils.getImage('ic_edit', 25.w, 21.w),
-                      //       SizedBox(
-                      //         height: 4.w,
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
-                      // SizedBox(
-                      //   height: 15.w,
-                      //   width: 12.w,
-                      // ),
+                      CountDownWidget(
+                          index: widget.index,
+                          validTime: widget.entity!.alarmTime!,
+                          switchAlarm: switchAlarm,
+                          isAlarming: isAlarming),
+                      SizedBox(
+                        height: 15.w,
+                        width: 18.w,
+                      ),
                       GestureDetector(
                         onTap: () => onDisable(),
                         child: Column(

@@ -85,13 +85,17 @@ class _AlarmItemViewState extends State<AlarmItemView> {
                       ),
                     ],
                   ),
-                  CountDownWidget(
-                      index: widget.index,
-                      validTime: widget.entity!.alarmTime!,
-                      switchAlarm: switchAlarm,
-                      isAlarming: isAlarming),
                   Row(
                     children: [
+                      CountDownWidget(
+                          index: widget.index,
+                          validTime: widget.entity!.alarmTime!,
+                          switchAlarm: switchAlarm,
+                          isAlarming: isAlarming),
+                      SizedBox(
+                        height: 15.w,
+                        width: 18.w,
+                      ),
                       GestureDetector(
                         onTap: () => onDisable(),
                         child: Column(

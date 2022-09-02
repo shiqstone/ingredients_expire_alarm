@@ -87,53 +87,62 @@ class ItemView extends StatelessWidget {
                               height: 15.w,
                               width: 22.w,
                             ),
-                            Text(period.toString(),
-                                style: TextStyle(
-                                    height: 1.8.w,
-                                    color: themeColor.primaryColor,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16.sp)),
-                            SizedBox(
-                              height: 15.w,
-                              width: 5.w,
-                            ),
-                            Text(ptype,
-                                style: TextStyle(
-                                    height: 1.8.w,
-                                    color: themeColor.titleBlackColor,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 16.sp)),
-                            SizedBox(
-                              height: 15.w,
-                            ),
                           ],
                         ),
                       ),
                     ],
                   ),
-                  GestureDetector(
-                    onTap: () => {Get.to(() => EditItemRecordPage(id: entity!.id!))},
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ViewUtils.getImage('ic_comment_bi', 25.w, 21.w),
-                        SizedBox(
-                          height: 4.w,
+                  Row(
+                    children: [
+                      Text(period.toString(),
+                          style: TextStyle(
+                              height: 1.8.w,
+                              color: themeColor.primaryColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16.sp)),
+                      SizedBox(
+                        height: 15.w,
+                        width: 8.w,
+                      ),
+                      Text(ptype,
+                          style: TextStyle(
+                              height: 1.8.w,
+                              color: themeColor.titleBlackColor,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16.sp)),
+                      SizedBox(
+                        height: 15.w,
+                        width: 8.w,
+                      ),
+                      GestureDetector(
+                        onTap: () => {Get.to(() => EditItemRecordPage(id: entity!.id!))},
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ViewUtils.getImage('ic_comment_bi', 25.w, 21.w),
+                            SizedBox(
+                              height: 4.w,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => {onDelete(entity!.id!)},
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ViewUtils.getImage('ic_delete', 25.w, 21.w),
-                        SizedBox(
-                          height: 4.w,
+                      ),
+                      SizedBox(
+                        height: 15.w,
+                        width: 8.w,
+                      ),
+                      GestureDetector(
+                        onTap: () => {onDelete(entity!.id!)},
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ViewUtils.getImage('ic_delete', 25.w, 21.w),
+                            SizedBox(
+                              height: 4.w,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
